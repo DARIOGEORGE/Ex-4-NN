@@ -1,8 +1,7 @@
-
-<H3>Dario G</H3>
-<H3>212222230027</H3>
+<H3>ENTER YOUR NAME : Dario G</H3>
+<H3>ENTER YOUR REGISTER NO : 212222230027</H3>
 <H3>EX. NO.4</H3>
-<H3>DATE:17-10-2024</H3>
+<H3>DATE: 27-09-2024</H3>
 <H1 ALIGN =CENTER>Implementation of MLP with Backpropagation for Multiclassification</H1>
 <H3>Aim:</H3>
 To implement a Multilayer Perceptron for Multi classification
@@ -23,7 +22,7 @@ MLP has the following features:
 Ø  Consists of two passes
 
   	(i)Feed Forward pass
-	(ii)Backward pass
+	         (ii)Backward pass
            
 Ø  Learning process –backpropagation
 
@@ -118,49 +117,58 @@ Normalize our dataset.
 
 ```
 import pandas as pd
+import sklearn
+from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-```
-```
+from sklearn.metrics import classification_report, confusion_matrix
+
 url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
-arr = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth', 'Species']
-df = pd.read_csv(url, names=arr)
-print(df.head())
-```
-```
-a = df.iloc[:, 0:4]
-b = df.select_dtypes(include=[object])
-b = df.iloc[:,4:5]
-```
-```
-training_a, testing_a, training_b, testing_b = train_test_split(a, b, test_size = 0.25)
-myscaler = StandardScaler()
-myscaler.fit(training_a)
-training_a = myscaler.transform(training_a)
-testing_a = myscaler.transform(testing_a)
-m1 = MLPClassifier(hidden_layer_sizes=(12, 13, 14), activation='relu', solver='adam', max_iter=2500)
-m1.fit(training_a, training_b.values.ravel())
-predicted_values = m1.predict(testing_a)
-```
-```
-print(confusion_matrix(testing_b,predicted_values))
-print(classification_report(testing_b,predicted_values))
-for i in predicted_values:
-print(i)
+names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'Class']
+irisdata = pd.read_csv(url, names=names)
+
+X = irisdata.iloc[:, 0:4]
+y = irisdata.select_dtypes(include=[object])
+
+X.head()
+y.head()
+
+y.Class.unique()
+
+le = preprocessing.LabelEncoder()
+y = y.apply(le.fit_transform)
+y.head()
+
+X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.20)
+scaler = StandardScaler()
+scaler.fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+
+mlp = MLPClassifier(hidden_layer_sizes=(10, 10, 10), max_iter=1000)
+mlp.fit(X_train, y_train)
+
+predictions = mlp.predict(X_test)
+flower_predictions = le.inverse_transform(predictions)
+
+print(flower_predictions)  
+print(confusion_matrix(y_test, predictions))
+print(classification_report(y_test, predictions))
 ```
 
 <H3>Output:</H3>
 
-![image](https://github.com/user-attachments/assets/667586f1-fe02-4c5b-a2ef-258f374651e3)
-<br>
-![image](https://github.com/user-attachments/assets/5877f9d8-2124-4476-8601-632bfe8c756a)
-<br>
-![image](https://github.com/user-attachments/assets/9b3321bc-6699-409c-94a4-4cc57887e02c)
-<br>
-![image](https://github.com/user-attachments/assets/37e3df88-6ae6-43d8-b158-a6247808d364)
+![image](https://github.com/user-attachments/assets/00734834-75b6-4308-adb5-c495f0094b4a)
+
+![image](https://github.com/user-attachments/assets/4b1ceb23-3d32-40a3-8480-62ba5ff05c13)
+
+![image](https://github.com/user-attachments/assets/7f647ed3-cf0e-4c45-8aa9-5d83a58249a5)
+
+![image](https://github.com/user-attachments/assets/aa8a9f00-da35-4b6d-bbf0-af3bc134721f)
+
+![image](https://github.com/user-attachments/assets/827b724c-0ff5-4519-9077-398c0a9c67e9)
+
 
 
 
